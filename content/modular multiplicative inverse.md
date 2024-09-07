@@ -26,42 +26,41 @@ tags: []
 
 ## Rust Implementation
 ```rust
-use num_bigint::BigUint;
-use num_traits::{Zero, One};
-
 fn mod_inverse(a: &BigUint, m: &BigUint) -> Option<BigUint> {
-    let mut t = BigUint::zero();
-    let mut newt = BigUint::one();
-    let mut r = m.clone();
-    let mut newr = a.clone();
+    let a = a.to_bigint().unwrap();
+    let m = m.to_bigint().unwrap();
+    let (mut t, mut newt) = (BigInt::zero(), BigInt::one());
+    let (mut r, mut newr) = (m.clone(), a);
 
     while !newr.is_zero() {
         let quotient = &r / &newr;
-        t = std::mem::replace(&mut newt, t - &quotient * &newt);
-        r = std::mem::replace(&mut newr, r - &quotient * &newr);
+        (t, newt) = (newt.clone(), t - &quotient * &newt);
+        (r, newr) = (newr.clone(), r - &quotient * &newr);
     }
 
-    if r > BigUint::one() {
-        None // Modular inverse doesn't exist
-    } else if t < BigUint::zero() {
-        Some(t + m)
+    if r > BigInt::one() {
+        None
     } else {
-        Some(t)
-    }
-}
-
-fn main() {
-    let a = BigUint::from(3u32);
-    let m = BigUint::from(11u32);
-    
-    if let Some(inverse) = mod_inverse(&a, &m) {
-        println!("The modular multiplicative inverse of {} modulo {} is {}", a, m, inverse);
-        // This should print: The modular multiplicative inverse of 3 modulo 11 is 4
-        // Because (3 * 4) % 11 = 1
-    } else {
-        println!("Modular inverse doesn't exist");
+        while t < BigInt::zero() {
+            t += &m;
+        }
+        Some((t % &m).to_biguint().unwrap())
     }
 }
 ```
+### Notes
+This Rust function implements the [[Extended Euclidean Algorithm]] to find the modular multiplicative inverse of a number. Here's a step-by-step explanation:
 
-This implementation uses the [[extended Euclidean algorithm]] to find the modular multiplicative inverse. This works for all cases where the inverse exists.
+1. The function takes two `BigUint` (big unsigned integer) references as input: `a` and `m`.
+2. It converts both inputs to `BigInt` (big signed integer) for the algorithm.
+3. It initializes variables for the algorithm:
+   - `t` and `newt` for tracking coefficients
+   - `r` and `newr` for tracking remainders
+4. The main loop implements the Extended Euclidean Algorithm:
+   - It calculates the quotient and updates `t`, `newt`, `r`, and `newr` in each iteration
+   - The loop continues until `newr` becomes zero
+5. After the loop, it checks if a modular inverse exists:
+   - If `r > 1`, no inverse exists, so it returns `None`
+   - Otherwise, it adjusts `t` to be positive and returns `t % m` as the inverse
+
+This algorithm is used in various cryptographic applications, including [[RSA|RSA encryption]].

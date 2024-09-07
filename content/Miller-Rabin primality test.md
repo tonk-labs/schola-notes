@@ -24,48 +24,48 @@ tags: []
 
 ## Rust Implementation
 ```rust
-fn miller_rabin(n: u64) -> bool {
-    let witnesses = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
-    for &a in witnesses.iter() {
-        if n == a {
-            return true;
-        }
-
-        if !witness(a, n) {
-            return false;
-        }
+fn miller_rabin_test(n: &BigUint, a: &BigUint) -> bool {
+    if *n == BigUint::from(2u32) {
+        return true;
     }
-    true
-}
-```
-- This function tests the number against a fixed set of "witnesses".
-- If the number fails the test for any witness, it's composite.
-- If it passes for all witnesses, it's probably prime.
-
-```rust
-fn witness(a: u64, n: u64) -> bool {
-    let mut t = n - 1;
-    let mut s = 0;
-
-    while t % 2 == 0 {
-        t /= 2;
-        s += 1;
+    if n.is_even() {
+        return false;
     }
 
-    let mut x = mod_pow(a, t, n);
-    if x == 1 || x == n - 1 {
+    let n_minus_one = n - 1u32;
+    let s = n_minus_one.trailing_zeros().unwrap();
+    let d = &n_minus_one >> s;
+
+    let mut x = a.modpow(&d, n);
+    if x == BigUint::one() || x == n_minus_one {
         return true;
     }
 
-    for _ in 0..s-1 {
-        x = mod_mul(x, x, n);
-        if x == n - 1 {
+    for _ in 0..s - 1 {
+        x = (&x * &x) % n;
+        if x == n_minus_one {
             return true;
         }
     }
+
     false
 }
 ```
-- This function performs the actual Miller-Rabin test for a single witness.
-- It first decomposes n-1 into (2^s) * t.
-- Then it computes a^t mod n and checks for the conditions that indicate primality.
+### Notes
+Here's a step-by-step explanation of the function:
+
+1. The function takes two `BigUint` parameters: `n` (the number to test for primality) and `a` (a random base used in the test).
+2. First, it checks if `n` is 2, which is prime, so it returns `true`.
+3. If `n` is even (and not 2), it's not prime, so it returns `false`.
+4. It calculates `n_minus_one` as `n - 1`.
+5. It finds `s` and `d` such that `n - 1 = 2^s * d`, where `d` is odd:
+   - `s` is the number of trailing zeros in the binary representation of `n_minus_one`.
+   - `d` is `n_minus_one` right-shifted by `s` bits.
+6. It computes `x = a^d mod n` using the `modpow` function.
+7. If `x` is 1 or `n - 1`, it returns `true` (probably prime).
+8. It then enters a loop that runs `s - 1` times:
+   - In each iteration, it squares `x` modulo `n`.
+   - If `x` becomes `n - 1`, it returns `true` (probably prime).
+9. If the loop completes without returning, it returns `false` (composite).
+
+This test is not definitive but provides a strong probabilistic indication of primality. To increase certainty, the test is typically run multiple times with different random bases `a`.

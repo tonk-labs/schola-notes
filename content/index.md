@@ -26,7 +26,7 @@ If you'd like to follow along, you may navigate to [this Notion page](https://ww
 - [[RSA]]
 
 #### EXERCISES
-- Implement naive RSA
+- [[RSA|Implement naive RSA]]
 
 #### REFERENCES
 - [Lambda Week 1 Recommended Material](https://github.com/lambdaclass/sparkling_water_bootcamp)

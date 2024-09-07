@@ -15,167 +15,163 @@ tags: []
 6. Implement encryption: $c = m^e mod n$
 7. Implement decryption: $m = c^d mod n$
 
-## Rust Implementation
+## Optimised Rust Implementation
 ```rust
-use rand::Rng;
+use num_bigint::{BigInt, BigUint, RandBigInt, ToBigInt};
+use num_integer::Integer;
+use num_traits::{One, Zero};
+use rand::prelude::*;
+use rayon::prelude::*;
+use std::sync::Arc;
 
-fn is_prime(n: u64) -> bool {
-    if n <= 1 {
-        return false;
-    }
+const SMALL_PRIMES: [u32; 12] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
 
-    if n <= 3 {
-        return true;
-    }
-
-    if n % 2 == 0 || n % 3 == 0 {
-        return false;
-    }
-
-    let limit = (n as f64).sqrt() as u64;
-    let mut i = 5;
-    while i <= limit {
-        if n % i == 0 || n % (i + 2) == 0 {
-            return false;
-        }
-        i += 6;
-    }
-
-    if n < 2_u64.pow(32) {
-        return true;
-    }
-
-    miller_rabin(n)
-}
-
-fn miller_rabin(n: u64) -> bool {
-    let witnesses = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
-    for &a in witnesses.iter() {
-        if n == a {
-            return true;
-        }
-
-        if !witness(a, n) {
-            return false;
-        }
-    }
-    true
-}
-
-fn witness(a: u64, n: u64) -> bool {
-    let mut t = n - 1;
-    let mut s = 0;
-
-    while t % 2 == 0 {
-        t /= 2;
-        s += 1;
-    }
-
-    let mut x = mod_pow(a, t, n);
-    if x == 1 || x == n - 1 {
-        return true;
-    }
-
-    for _ in 0..s - 1 {
-        x = mod_mul(x, x, n);
-        if x == n - 1 {
-            return true;
-        }
-    }
-    false
-}
-
-fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
-    if modulus == 1 {
-        return 0;
-    }
-
-    let mut result = 1;
-    base %= modulus;
-    while exp > 0 {
-        if exp % 2 == 1 {
-            result = mod_mul(result, base, modulus);
-        }
-
-        exp >>= 1;
-        base = mod_mul(base, base, modulus);
-    }
-    result
-}
-
-fn mod_mul(a: u64, b: u64, m: u64) -> u64 {
-    ((a as u128 * b as u128) % m as u128) as u64
-}
-
-fn generate_prime(min: u64, max: u64) -> u64 {
-    let mut rng = rand::thread_rng();
+fn generate_prime(bits: u64) -> BigUint {
+    let mut rng = thread_rng();
     loop {
-        let n = rng.gen_range(min..=max);
-        if is_prime(n) {
+        let n: BigUint = rng.gen_biguint(bits);
+        if n.is_odd() && is_prime(&n) {
             return n;
         }
     }
 }
 
-fn gcd(a: u64, b: u64) -> u64 {
-    if b == 0 {
-        a
-    } else {
-        gcd(b, a % b)
+fn miller_rabin_test(n: &BigUint, a: &BigUint) -> bool {
+    if *n == BigUint::from(2u32) {
+        return true;
     }
-}
+    if n.is_even() {
+        return false;
+    }
 
-fn mod_inverse(a: u64, m: u64) -> Option<u64> {
-    for i in 1..m {
-        if (a * i) % m == 1 {
-            return Some(i);
+    let n_minus_one = n - 1u32;
+    let s = n_minus_one.trailing_zeros().unwrap();
+    let d = &n_minus_one >> s;
+
+    let mut x = a.modpow(&d, n);
+    if x == BigUint::one() || x == n_minus_one {
+        return true;
+    }
+
+    for _ in 0..s - 1 {
+        x = (&x * &x) % n;
+        if x == n_minus_one {
+            return true;
         }
     }
-    Nne
+
+    false
 }
 
-fn generate_keys() -> ((u64, u64), (u64, u64)) {
-    let p = generate_prime(100, 1000);
-    let q = generate_prime(100, 1000);
-    let n = p * q;
-    let phi = (p - 1) * (q - 1);
-
-    let mut e = 65537; // Common choice for e
-    while gcd(e, phi) != 1 {
-        e += 2;
+fn is_prime(n: &BigUint) -> bool {
+    for &p in &SMALL_PRIMES {
+        if *n == p.into() {
+            return true;
+        }
+        if n % p == BigUint::zero() {
+            return false;
+        }
     }
 
-    let d = mod_inverse(e, phi).unwrap();
+    if n < &BigUint::from(2047u32) {
+        return miller_rabin_test(n, &BigUint::from(2u32));
+    }
 
-    ((e, n), (d, n)) // ((public_key), (private_key))
+    let bases: Arc<Vec<BigUint>> = Arc::new(
+        if n.bits() < 64 {
+            vec![2u32, 3, 5, 7, 11, 13, 17]
+        } else if n.bits() < 128 {
+            vec![2u32, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
+        } else {
+            vec![2u32, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41]
+        }
+        .into_iter()
+        .map(BigUint::from)
+        .collect::<Vec<BigUint>>(),
+    );
+
+    bases.par_iter().all(|b| miller_rabin_test(n, b))
 }
 
-fn encrypt(message: u64, public_key: (u64, u64)) -> u64 {
-    let (e, n) = public_key;
-    mod_pow(message, e, n)
+fn mod_inverse(a: &BigUint, m: &BigUint) -> Option<BigUint> {
+    let a = a.to_bigint().unwrap();
+    let m = m.to_bigint().unwrap();
+    let (mut t, mut newt) = (BigInt::zero(), BigInt::one());
+    let (mut r, mut newr) = (m.clone(), a);
+
+    while !newr.is_zero() {
+        let quotient = &r / &newr;
+        (t, newt) = (newt.clone(), t - &quotient * &newt);
+        (r, newr) = (newr.clone(), r - &quotient * &newr);
+    }
+
+    if r > BigInt::one() {
+        None
+    } else {
+        while t < BigInt::zero() {
+            t += &m;
+        }
+        Some((t % &m).to_biguint().unwrap())
+    }
 }
 
-fn decrypt(ciphertext: u64, private_key: (u64, u64)) -> u64 {
-    let (d, n) = private_key;
-    mod_pow(ciphertext, d, n)
+fn generate_keypair() -> (BigUint, BigUint, BigUint) {
+    let (p, q) = rayon::join(|| generate_prime(1024), || generate_prime(1024));
+    let n = &p * &q;
+    let phi = (&p - 1u32) * (&q - 1u32);
+    let e = BigUint::from(65537u32);
+    let d = mod_inverse(&e, &phi).unwrap();
+    (n, e, d)
+}
+
+fn encrypt(m: &BigUint, e: &BigUint, n: &BigUint) -> BigUint {
+    m.modpow(e, n)
+}
+
+fn decrypt(c: &BigUint, d: &BigUint, n: &BigUint) -> BigUint {
+    c.modpow(d, n)
 }
 
 fn main() {
-    let (public_key, private_key) = generate_keys();
-    println!("Public Key (e, n): {:?}", public_key);
-    println!("Private Key (d, n): {:?}", private_key);
+    let (n, e, d) = generate_keypair();
+    println!("Public key (n, e): ({}, {})", n, e);
+    println!("Private key (d): {}", d);
 
-    let message = 42;
-    println!("Original Message: {}", message);
+    let message = BigUint::from(758562222222222343u64);
+    println!("Original message: {}", message);
 
-    let encrypted = encrypt(message, public_key);
-    println!("Encrypted: {}", encrypted);
+    let encrypted = encrypt(&message, &e, &n);
+    println!("Encrypted message: {}", encrypted);
 
-    let decrypted = decrypt(encrypted, private_key);
-    println!("Decrypted: {}", decrypted);
+    let decrypted = decrypt(&encrypted, &d, &n);
+    println!("Decrypted message: {}", decrypted);
+
+    assert_eq!(message, decrypted);
 }
 ```
 
 ### Notes
+This code implements the RSA (Rivest-Shamir-Adleman) cryptosystem, a widely used public-key cryptography algorithm. Here's a general outline of what the code does and how it works:
+
+1. Import necessary libraries for big integer operations, random number generation, and parallel processing.
+2. Define constants and helper functions:
+   - `SMALL_PRIMES`: A list of small prime numbers for initial primality checks.
+   - `generate_prime`: Generates a prime number of a specified bit length.
+   - `miller_rabin_test`: Implements the [[Miller-Rabin primality test]].
+   - `is_prime`: Checks if a number is prime using small prime divisions and Miller-Rabin tests.
+   - `mod_inverse`: Calculates the [[modular multiplicative inverse]].
+3. Implement core RSA functions:
+   - `generate_keypair`: Generates RSA public and private keys.
+   - `encrypt`: Encrypts a message using the public key.
+   - `decrypt`: Decrypts a message using the private key.
+4. In the `main` function:
+   - Generate a keypair (public and private keys).
+   - Create a sample message.
+   - Encrypt the message using the public key.
+   - Decrypt the encrypted message using the private key.
+   - Verify that the decrypted message matches the original.
+
+The code uses parallel processing (via the `rayon` library) and optimized primality testing to improve performance. It also employs big integer arithmetic to handle the large numbers involved in RSA cryptography.
+
 - [[Miller-Rabin primality test]] for numbers larger than 2^32
 - [[Modular exponentiation]] to calculate (base^exp) % modulus
