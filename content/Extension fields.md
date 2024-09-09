@@ -6,7 +6,7 @@ tags: []
 ---
 
 # Extension fields
-Fundamental concept in abstract algebra, esp field theory. Crucial role in understanding structure of fields and have important applications in areas like algebraic number theory and [[Galois theory]].
+Fundamental concept in abstract algebra, esp field theory. Crucial role in understanding structure of fields and have important applications in areas like algebraic number theory and [[Galois Theory|Galois theory]].
 
 ## Definition
 An extension field is a larger field that contains a given base field as a subfield. If $F$ is the base field and $E$ is the extension field, we denote this as $E/F$ ("E over F").
