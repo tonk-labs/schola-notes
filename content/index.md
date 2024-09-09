@@ -20,9 +20,9 @@ If you'd like to follow along, you may navigate to [this Notion page](https://ww
 ### [[Week 1]]
 - [[Groups]], [[subgroup|subgroups]], [[rings]], [[fields]]
 - [[Finite Fields]]
-- Euler's Theorem, [[Fermat's Little Theorem]]
-- Chinese Remainder Theorem
-- Primality Testing
+- [[Euler's Theorem]], [[Fermat's Little Theorem]]
+- [[Chinese Remainder Theorem]]
+- [[Primality Testing]]
 - [[RSA]]
 
 #### EXERCISES
@@ -35,3 +35,21 @@ If you'd like to follow along, you may navigate to [this Notion page](https://ww
 - https://cims.nyu.edu/~regev/teaching/discrete_math_fall_2005/dmbook.pdf (CH. 8)
 - Elementary Number Theory
 - Comp Intro to AA and NT
+
+### [[Week 2]]
+- [[Polynomials]]
+    - [[Polynomial arithmetic]]
+    - [[Extension fields]] and [[error-correcting codes]]
+    - [[Reed-Solomon Codes]]
+- [[Roots of unity]]
+- [[Fast Fourier Transform]]
+
+#### EXERCISES
+- Implement basic Shamir's secret sharing
+
+#### REFERENCES
+- https://berthub.eu/articles/posts/reed-solomon-for-programmers/
+- Lambda Week 3 Recommended Material (Polynomials)
+- https://github.com/pluto/ronkathon/tree/main/src/codes
+- https://github.com/pluto/ronkathon/blob/main/math/polynomial.sage
+- Moonmath Manual Polynomial Arithmetic
