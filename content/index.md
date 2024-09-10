@@ -45,7 +45,7 @@ If you'd like to follow along, you may navigate to [this Notion page](https://ww
 - [[Fast Fourier Transform]]
 
 #### EXERCISES
-- Implement basic Shamir's secret sharing
+- Implement basic [[Shamir's secret sharing]]
 
 #### REFERENCES
 - https://berthub.eu/articles/posts/reed-solomon-for-programmers/

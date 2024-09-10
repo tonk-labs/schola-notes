@@ -24,7 +24,7 @@ tags: []
 4. Calculation:
    The most common way to calculate the modular multiplicative inverse is using the [[extended Euclidean algorithm]].
 
-## Rust Implementation
+## Rust Implementation 1
 ```rust
 fn mod_inverse(a: &BigUint, m: &BigUint) -> Option<BigUint> {
     let a = a.to_bigint().unwrap();
@@ -64,3 +64,94 @@ This Rust function implements the [[Extended Euclidean Algorithm]] to find the m
    - Otherwise, it adjusts `t` to be positive and returns `t % m` as the inverse
 
 This algorithm is used in various cryptographic applications, including [[RSA|RSA encryption]].
+
+## Rust Implementation 2
+```rust
+/// Computes the modular multiplicative inverse of 'a' modulo 'm' using the extended Euclidean algorithm.
+///
+/// # Arguments
+/// * `a` - The number to find the inverse for
+/// * `m` - The modulus
+///
+/// # Returns
+/// The modular multiplicative inverse of 'a' modulo 'm' as a BigInt
+///
+/// # Panics
+/// Panics if 'a' is not invertible modulo 'm'
+fn mod_inverse(a: &BigInt, m: &BigInt) -> BigInt {
+    let mut t = BigInt::zero();
+    let mut new_t = BigInt::one();
+    let mut r = m.clone();
+    let mut new_r = a.clone();
+
+    while new_r != BigInt::zero() {
+        let quotient = &r / &new_r;
+        t -= &quotient * &new_t;
+        std::mem::swap(&mut t, &mut new_t);
+        r -= &quotient * &new_r;
+        std::mem::swap(&mut r, &mut new_r);
+    }
+
+    if r > BigInt::one() {
+        panic!("a is not invertible");
+    }
+    if t < BigInt::zero() {
+        t += m;
+    }
+    t
+}
+```
+
+### Notes
+1. Function signature:
+   ```rust
+   fn mod_inverse(a: &BigInt, m: &BigInt) -> BigInt
+   ```
+   This function takes two references to `BigInt` values (`a` and `m`) and returns a `BigInt`.
+
+2. Initialization:
+   ```rust
+   let mut t = BigInt::zero();
+   let mut new_t = BigInt::one();
+   let mut r = m.clone();
+   let mut new_r = a.clone();
+   ```
+   - `t` and `new_t` are used to keep track of coefficients in the extended Euclidean algorithm.
+   - `r` and `new_r` are used to store remainders.
+
+3. Main loop:
+   ```rust
+   while new_r != BigInt::zero() {
+       let quotient = &r / &new_r;
+       t -= &quotient * &new_t;
+       std::mem::swap(&mut t, &mut new_t);
+       r -= &quotient * &new_r;
+       std::mem::swap(&mut r, &mut new_r);
+   }
+   ```
+   This loop implements the extended Euclidean algorithm:
+   - Calculate the quotient of `r` divided by `new_r`.
+   - Update `t` and `r` using the quotient.
+   - Swap `t` with `new_t` and `r` with `new_r` to prepare for the next iteration.
+
+4. Check for invertibility:
+   ```rust
+   if r > BigInt::one() {
+       panic!("a is not invertible");
+   }
+   ```
+   If the final remainder is greater than 1, it means `a` is not invertible modulo `m`.
+
+5. Ensure positive result:
+   ```rust
+   if t < BigInt::zero() {
+       t += m;
+   }
+   ```
+   If `t` is negative, add `m` to make it positive while maintaining the same result modulo `m`.
+
+6. Return the result:
+   ```rust
+   t
+   ```
+   The final value of `t` is the modular inverse of `a` modulo `m`.

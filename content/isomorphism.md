@@ -27,7 +27,7 @@ Fundamental concept in abstract algebra. Allow us to identify when two seemingly
     - For rings $R$ and $S$, a bijective map $\varphi$: $R \rightarrow S$ such that: $\varphi(a+b)=\varphi(a)+\varphi(b)$ and $\varphi(ab)=\varphi(a)\varphi(b)$ for all $a,b$ in $R$
 - Field Isomorphisms
     - Similar to ring isomorphisms, but between [[fields]]
-    - Also preserves multiplicative inverse
+    - Also preserves [[1725555801-modular-multiplicative-inverse|multiplicative inverse]]
 - Vector Space Isomorphisms
     - Linear bijections between vector spaces
     - Preserve vector addition and scalar multiplication

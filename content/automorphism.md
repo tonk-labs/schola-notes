@@ -28,7 +28,7 @@ Fundamental concept in algebra, crucial in [[1725899101-galois-theory|Galois The
     - Preserve both addition and multiplication
     - Ex: complex conjugation is an automorphism of $C$
 - Field Automorphisms
-    - Preserve addition, multiplication, and multiplicative inverses
+    - Preserve addition, multiplication, and [[1725555801-modular-multiplicative-inverse|multiplicative inverse]]
     - **Crucial in Galois theory**
 - Vector Space Automorphisms
     - Linear transformations that are bijective

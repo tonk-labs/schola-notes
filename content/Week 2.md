@@ -14,7 +14,7 @@ tags: []
 - [[Fast Fourier Transform]]
 
 # Exercises
-- Implement basic Shamir's secret sharing
+- Implement basic [[Shamir's secret sharing]]
 
 # References
 - https://berthub.eu/articles/posts/reed-solomon-for-programmers/

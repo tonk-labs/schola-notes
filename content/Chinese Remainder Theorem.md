@@ -18,7 +18,7 @@ tags: []
 ## Constructing the Solution:
 - Calculate $M=m_1*m_2*\dots *m_n$
 - For each $i$, calculate $M_i=M/m_i c$
-- Find the modular multiplicative inverse of $M_i$ modulo $m_i$, call it $y_i$ ($M_i y_i \equiv 1 \text{ (mod } m_i \text{)}$)
+- Find the [[modular multiplicative inverse]] of $M_i$ modulo $m_i$, call it $y_i$ ($M_i y_i \equiv 1 \text{ (mod } m_i \text{)}$)
 - The solution is: $x \equiv (a_1M_1y_1+a_2M_2y_2+\dots+a_nM_ny_n)$ (mod $M$).
 
 ## Why It Works
