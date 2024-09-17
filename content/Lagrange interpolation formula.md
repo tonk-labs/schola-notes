@@ -10,9 +10,7 @@ A mathematical method used to reconstruct a polynomial given a set of points. In
 
 The general form of the Lagrange interpolation formula is:
 
-```
-f(x) = Σ(i=1 to n) yi * Li(x)
-```
+$$f(x) = Σ(i=1 to n) yi * Li(x)$$
 
 Where:
 - `f(x)` is the reconstructed polynomial
@@ -41,9 +39,7 @@ In the [[1725904360-shamirs-secret-sharing|Shamir's Secret Sharing]] code, this 
    ```
 
    This calculates:
-   ```
-   Li(x) = Π(j≠i) (x - xj) / (xi - xj)
-   ```
+   $$Li(x) = Π(j≠i) (x - xj) / (xi - xj)$$
 
 3. The `yi` term is multiplied in:
    ```rust

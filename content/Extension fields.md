@@ -51,7 +51,7 @@ Degree of an extension $E/F$, denoted $[E:F]$, is the dimension of $E$ as a vect
 - Solving Polynomial Equations
     - Extension fields allow us to find roots of polynomials that don't have roots in the base field
 - Constructibility Problems
-    - In geometry, extension fields help determine which lengths are constructible with compass and straightedge
+    - In geometry, extension fields help determine which lengths are constructible with compass and straight-edge
 - [[Galois Theory]]
     - Uses field extensions to study the solvability of polynomial equations and the relationship between roots of polynomials
 - Algebraic Number Theory

@@ -34,7 +34,7 @@ Fundamental concept in abstract algebra. Allow us to identify when two seemingly
 
 ## Isomorphism Theorems
 Several important isomorphism theorems in algebra that relate quotient structures to substructures:
-- First Isomorphism Theorem (for groups): $G/\text{ker}(\varphi)\cong\text{im}(\varphi)$ for any homomorphism $\varphi$
+- First Isomorphism Theorem (for groups): $G/\text{ker}(\varphi)\cong\text{im}(\varphi)$ for any [[homomorphism]] $\varphi$
 - Similar theories exist for [[rings]] and other algebraic structures
 
 ## Properties Preserved by Isomorphisms
