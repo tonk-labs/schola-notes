@@ -48,7 +48,7 @@ Uses the properties of elliptic curves to create cryptographic algorithms that a
 - *Elliptic Curve Digital Signature Algorithm (ECDSA)* — method for creating digital signatures, ensuring message integrity and authenticity
 - *Elliptic Curve Integrated Encryption Scheme (ECIES)* — hybrid encryption scheme combining ECC with symmetric encryption for data confidentiality
 
-## [[1726579238-bilinear-pairings|Pairings]] on Elliptic Curves
+## [[Bilinear pairings|Pairings]] on Elliptic Curves
 Bilinear maps that take two points on an elliptic curve and output an element in a finite field, enabling advanced cryptographic protocols.
 
 ### Definition
@@ -66,7 +66,7 @@ Each have respective applications for which they have better computational advan
 
 ### Applications in Cryptography
 - *Identity-Based Encryption (IBE)* — allows the use of arbitrary strings (e.g., email addresses) as public keys
-- *Short Signatures* — schemes such as [[1726567320-bls-threshold|BLS]] (Boneh-Lynn-Shacham) enable very short signatures with security based on hardness of certain problems in pairing-friendly groups
+- *Short Signatures* — schemes such as [[BLS Threshold|BLS]] (Boneh-Lynn-Shacham) enable very short signatures with security based on hardness of certain problems in pairing-friendly groups
 - *Attribute-Based Encryption (ABE)* — enables fine-grained access control over encrypted data
 
 ## Common Curves

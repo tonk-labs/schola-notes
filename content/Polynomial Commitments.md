@@ -35,7 +35,7 @@ Essential for constructing efficient cryptographic protocols where the size of t
     - *Fast Verification* — verifier's work should be minimal, enabling practical development
 
 ## Types of Commitment Schemes
-### Kate Commitments ([[1726567313-kzg|KZG]] Commitments)
+### Kate Commitments ([[KZG]] Commitments)
 - *Setup* — trusted setup generates public parameters, including sequence $\{\tau^i\}$ for $i=0$ to $d$, where $\tau$ is a secret
 - *Commit* — given polynomial $f(x)=\sum^d_{i=0}{f_ix^i}$, the commitment is:
 $$C=\sum_{i=0}^d{f_iG^{\tau^i}}$$
@@ -44,7 +44,7 @@ where $G$ is a generator of an elliptic curve group.
 - *Verify* — verifier checks pairing equations to confirm proof's validity
 
 #### Use of Pairings
-KZG commitments rely on [[bilinear pairings]] on [[1726567251-elliptic-curves|elliptic curves]], which enable efficient verification through pairing-based equations.
+KZG commitments rely on [[bilinear pairings]] on [[elliptic curves]], which enable efficient verification through pairing-based equations.
 - *Bilinear Pairing* — a map $e:G_1\times G_2\rightarrow G_T$ satisfying bilinearity, non-degeneracy, and computability
 - *Verification Equation* — $e(C-y\cdot G, H)=e(\pi, G-s\cdot H)$, here, $H$ is another generator, and $s$ is the evaluation point
 
@@ -54,7 +54,7 @@ KZG commitments rely on [[bilinear pairings]] on [[1726567251-elliptic-curves|el
 
 #### Drawbacks
 - *Trusted setup* — requires a secure generation of secret $\tau$
-- *Security assumptions* — relies on hardness of [[1726567251-elliptic-curves#discrete-logarithm-problem-dlp|Discrete Logarithm Problem]] and *Computational Diffie-Hellman Problem* in pairing groups.
+- *Security assumptions* — relies on hardness of [[Elliptic Curves#discrete-logarithm-problem-dlp|Discrete Logarithm Problem]] and *Computational Diffie-Hellman Problem* in pairing groups.
 
 ### Other Schemes
 #### Pedersen Commitments
@@ -90,7 +90,7 @@ Drawbacks
 - *Ethereum 2.0* uses KZG commitments in *danksharding* proposal for scalable data availability proofs
 - *Plonk Protocol* is a universal SNARK protocol that uses polynomial commitments for efficient proof generation and verification
 
-## Connection to [[1725960857-lagrange-interpolation-formula|Lagrange Interpolation]]
+## Connection to [[Lagrange interpolation formula|Lagrange Interpolation]]
 Any polynomial $f(x)$ of degree $d$ can be uniquely distributed by $d+1$ evaluations at distinct points, which is fundamental in constructing and verifying polynomial commitments.
 
 ## Implementation Considerations

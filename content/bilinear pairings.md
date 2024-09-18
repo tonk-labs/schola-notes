@@ -23,5 +23,5 @@ Each have respective applications for which they have better computational advan
 
 ### Applications in Cryptography
 - *Identity-Based Encryption (IBE)* — allows the use of arbitrary strings (e.g., email addresses) as public keys
-- *Short Signatures* — schemes such as [[1726567320-bls-threshold|BLS]] (Boneh-Lynn-Shacham) enable very short signatures with security based on hardness of certain problems in pairing-friendly groups
+- *Short Signatures* — schemes such as [[BLS Threshold|BLS]] (Boneh-Lynn-Shacham) enable very short signatures with security based on hardness of certain problems in pairing-friendly groups
 - *Attribute-Based Encryption (ABE)* — enables fine-grained access control over encrypted data

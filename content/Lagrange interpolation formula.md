@@ -17,7 +17,7 @@ Where:
 - `yi` are the y-coordinates of the known points
 - `Li(x)` are the Lagrange basis polynomials
 
-In the [[1725904360-shamirs-secret-sharing|Shamir's Secret Sharing]] code, this formula is implemented as follows:
+In the [[Shamir's Secret Sharing]] code, this formula is implemented as follows:
 
 1. The outer loop `for i in 0..threshold` corresponds to the summation in the formula.
 

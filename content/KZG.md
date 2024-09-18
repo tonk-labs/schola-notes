@@ -16,12 +16,12 @@ KZG commitments allow a prover to:
 
 ## Mathematical Foundations
 Builds on:
-- [[1725898229-polynomial-arithmetic|Polynomial Arithmetic]]
-- [[1726567251-elliptic-curves#elliptic-curve-cryptography-ecc|Elliptic Curve Cryptography]]
-- [[1726567251-elliptic-curves#pairings-on-elliptic-curves|Pairings]]
+- [[Polynomial Arithmetic]]
+- [[Elliptic Curves#elliptic-curve-cryptography-ecc|Elliptic Curve Cryptography]]
+- [[Elliptic Curves#pairing-friendly-curves|Pairings]]
 
 ### Bilinear Pairings
-A [[1726579238-bilinear-pairings|bilinear pairing]] is a map:
+A [[bilinear pairings|bilinear pairing]] is a map:
 $$e:G_1\times G_2 \rightarrow G_T$$
 
 where:
@@ -58,7 +58,7 @@ Alternatively, using polynomial notation:
 - Represent $f(\tau)$ as an element in $G_1$:
     - $C=G^{f(\tau)}$
 
-This uses the [[1726580434-homomorphism|homomorphism]] between polynomials evaluated at $\tau$ and group elements.
+This uses the [[homomorphism]] between polynomials evaluated at $\tau$ and group elements.
 
 ### Open
 To prove that $y=f(s)$ for some $s\in \Bbb{F}_\tau$, the prover computes a proof $\pi$ as follows:
@@ -95,7 +95,7 @@ $$e(\pi, H^{\tau-s})=e(G^{\frac{f(\tau)-y}{\tau-s}},H^{\tau-s})=e(G^{f(\tau)-y},
 Thus, both sides are equal.
 
 ### Binding
-The binding property relies on the [[1726567251-elliptic-curves#discrete-logarithm-problem-dlp|discrete logarithm problem]] and the assumption that the prover cannot find two different polynomials $f(x)$ and $f'(x)$ such that $f(\tau)=f'(\tau)$, unless $f(x)=f'(x)$.
+The binding property relies on the [[elliptic curves#discrete-logarithm-problem-dlp|discrete logarithm problem]] and the assumption that the prover cannot find two different polynomials $f(x)$ and $f'(x)$ such that $f(\tau)=f'(\tau)$, unless $f(x)=f'(x)$.
 
 #### Security Assumption
 - *Computational Diffie-Hellman (CDH) Problem* — hardness of computing $G^{ab}$ given $G^a$ and $G^b$
@@ -124,7 +124,7 @@ Both the commitment $C$ and the proof $\pi$ are single elements in $G_1$, regard
 
 ### Prover Efficiency
 - The prover's work involves computing $w(x)$ and exponentiations
-- Efficient algorithms like [[1725903044-fast-fourier-transform|Fast Fourier Transforms (FFT)]] can optimise polynomial operations when dealing with large degrees.
+- Efficient algorithms like [[fast fourier transform|Fast Fourier Transforms (FFT)]] can optimise polynomial operations when dealing with large degrees.
 
 ## Applications of KZG Commitments
 ### zk-SNARKs

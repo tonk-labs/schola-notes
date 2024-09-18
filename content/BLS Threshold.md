@@ -9,7 +9,7 @@ tags: []
 Threshold cryptography allows a group of parties to jointly perform cryptographic operations such that only a subset (threshold) of the parties is required to collaborate, enhancing both security and availability. The Boneh-Lynn-Shacham (BLS) signature scheme is particularly well-suited for threshold implementations due to its simplicity and the properties of pairing-based cryptography.
 
 ## Overview
-A cryptographic algorithm that enables short signatures and efficient aggregation of signatures. Base on [[1726579238-bilinear-pairings|bilinear pairings]] over [[1726567251-elliptic-curves|elliptic curves]].
+A cryptographic algorithm that enables short signatures and efficient aggregation of signatures. Base on [[bilinear pairings]] over [[elliptic curves]].
 
 Key Features:
 - *Short Signatures* — signatures are elements of an elliptic curve group, resulting in compact representations
@@ -17,7 +17,7 @@ Key Features:
 - *Deterministic Signing* — signing process doesn't require randomness, simplifying implementation
 
 ### Mathematical Foundation
-Rely on properties of [[1726579238-bilinear-pairings|bilinear pairings]].
+Rely on properties of [[bilinear pairings]].
 
 ### Basic BLS Signature Scheme
 - Setup
@@ -53,7 +53,7 @@ Combining BLS with threshold cryptography results in *threshold BLS signatures*,
 - *Secret Sharing* — private key is shared among parties using a secret sharing scheme
 
 ### Secret Sharing Schemes
-See [[1725904360-shamirs-secret-sharing|Shamir's Secret Sharing]].
+See [[Shamir's Secret Sharing]].
 
 ### Threshold BLS Signature Protocol
 - Setup
@@ -66,7 +66,7 @@ See [[1725904360-shamirs-secret-sharing|Shamir's Secret Sharing]].
     2. Broadcast Partial Signatures
         - Parties share their $\sigma_i$ with the combiner
     3. Signature Reconstruction
-        - Using [[1725960857-lagrange-interpolation-formula|Lagrange interpolation]], combine $t$ partial signatures to form the full signature:
+        - Using [[Lagrange interpolation formula|Lagrange interpolation]], combine $t$ partial signatures to form the full signature:
         $$\sigma=\Pi_{i\in S,j\neq1}\sigma_i^{\lambda_i}$$
         where $S$ is the set of participating parties and $\lambda_i$ are Lagrange coefficients:
         $$\lambda_i=\Pi_{j\in S,j\neq i}\frac{j}{j-i}$$
